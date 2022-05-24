@@ -195,11 +195,13 @@ select pro.pro_id as "Product Id",pro.pro_name as "Product Name" from ecommerce.
 #8
 select cus_name as "Customer Name" ,cus_gender as "Customer Gender" from ecommerce.customer where substr(cus_name,1,1) ='A' OR right(cus_name,1);
 #9
-create view ratings_view as (select b.supp_id as "Supplier Id",b.supp_name as "Supplier Name",rate.rat_ratstars as 'ratings',case when rate.rat_ratstars = 5 then 'Excellent Service' 
+create view ecommerce.ratings_view as (select b.supp_id as "Supplier Id",b.supp_name as "Supplier Name",rate.rat_ratstars as 'ratings',case when rate.rat_ratstars = 5 then 'Excellent Service' 
 	when  rate.rat_ratstars >4   then 'Good Service'
     when  rate.rat_ratstars>2  then 'Average Service'
     else 'Poor Service'
-    END AS Type_of_service from(select a.supp_id,a.supp_name,a.pricing_id,ord.ord_id  from (SELECT sup.supp_id,sup.supp_name,supply.pricing_id  FROM ecommerce.supplier sup left join ecommerce.supplierpricing  supply on sup.supp_id = supply.supp_id) as a   inner join ecommerce.order ord on ord.pricing_id = a.pricing_id) as b inner join ecommerce.rating  rate on b.ord_id = rate.ord_id )
+    END AS Type_of_service from(select a.supp_id,a.supp_name,a.pricing_id,ord.ord_id  from (SELECT sup.supp_id,sup.supp_name,supply.pricing_id  FROM ecommerce.supplier sup left join ecommerce.supplierpricing  supply on sup.supp_id = supply.supp_id) as a   inner join ecommerce.order ord on ord.pricing_id = a.pricing_id) as b inner join ecommerce.rating  rate on b.ord_id = rate.ord_id );
+
+
 DELIMITER //
 
 CREATE PROCEDURE GetRatings( rating int)
@@ -210,7 +212,7 @@ END //
 
 DELIMITER ;
 
-CALL GetRatings(4);
+CALL GetRatings(3);
 
 
 
